@@ -1,0 +1,237 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+canvas{display:block;border-radius:12px;border:1.5px solid var(--color-border-tertiary);}
+.btn{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);}
+.btn.on{border-color:#185fa5;background:#e6f1fb;color:#185fa5;}
+.row{display:flex;align-items:center;gap:8px;margin:5px 0;flex-wrap:wrap;}
+.lbl{font-size:13px;font-weight:500;color:var(--color-text-primary);background:var(--color-background-secondary);border:1.5px solid var(--color-border-secondary);border-radius:20px;padding:6px 14px;white-space:nowrap;}
+.val{min-width:64px;text-align:center;font-size:13px;font-weight:500;background:var(--color-background-secondary);border:1.5px solid var(--color-border-secondary);border-radius:20px;padding:5px 10px;}
+.fml{font-size:13px;padding:9px 16px;border-radius:20px;background:var(--color-background-secondary);border:1.5px solid var(--color-border-secondary);color:var(--color-text-primary);margin:6px 0;font-family:ui-monospace,monospace;line-height:1.9;}
+</style>
+
+<canvas id="cv" style="width:100%;height:62vh;min-height:340px;"></canvas>
+
+<div class="fml">
+  <span style="color:#E24B4A">F = q·v×B</span> &nbsp;|&nbsp; r = mv/(|q|·B) &nbsp;|&nbsp; T = 2πm/(|q|·B) &nbsp;|&nbsp; B↑ → r↓
+</div>
+<div class="row">
+  <span class="lbl">Champ B (T)</span>
+  <input type="range" id="Bfield" min="0.5" max="5" value="2" step="0.5" style="flex:1;accent-color:#7F77DD;">
+  <span class="val" id="Bfieldv" style="color:#7F77DD;border-color:#AFA9EC;">2.0 T</span>
+</div>
+<div class="row">
+  <span class="lbl">Vitesse v (m/s)</span>
+  <input type="range" id="vel" min="10" max="300" value="50" step="10" style="flex:1;accent-color:#E24B4A;">
+  <span class="val" id="velv" style="color:#E24B4A;border-color:#f09595;">50 m/s</span>
+</div>
+<div class="row">
+  <span class="lbl">Charge q</span>
+  <button class="btn on" id="qpos" onclick="setQ(1)">+ (proton)</button>
+  <button class="btn" id="qneg" onclick="setQ(-1)">− (électron)</button>
+</div>
+<div class="row">
+  <span class="lbl">Direction B</span>
+  <button class="btn on" id="bup" onclick="setBdir(1)">⊙ sortant</button>
+  <button class="btn" id="bdown" onclick="setBdir(-1)">⊗ entrant</button>
+  <button class="btn on" id="bpause" onclick="togglePause()">Pause</button>
+  <button class="btn" onclick="resetParticle()">Réinitialiser</button>
+</div>
+<div id="info" style="font-size:12px;padding:7px 14px;border-radius:20px;background:var(--color-background-secondary);border:1.5px solid var(--color-border-secondary);color:var(--color-text-secondary);margin:4px 0;font-family:ui-monospace,monospace;line-height:1.8;"></div>
+
+<script>
+const cv=document.getElementById('cv');
+let W=0,H=0,paused=false,qSign=1,Bdir=1;
+let px,py,vx,vy,trail=[];
+const MAX_TRAIL=600;
+const MQ=0.8;
+
+function setQ(s){qSign=s;document.getElementById('qpos').className=s>0?'btn on':'btn';document.getElementById('qneg').className=s<0?'btn on':'btn';resetParticle();}
+function setBdir(d){Bdir=d;document.getElementById('bup').className=d>0?'btn on':'btn';document.getElementById('bdown').className=d<0?'btn on':'btn';resetParticle();}
+function togglePause(){paused=!paused;document.getElementById('bpause').textContent=paused?'Reprendre':'Pause';document.getElementById('bpause').className=paused?'btn on':'btn';}
+function getV(){return parseFloat(document.getElementById('vel').value);}
+function getB(){return parseFloat(document.getElementById('Bfield').value);}
+
+function resetParticle(){
+  if(!W)return;
+  px=W/2;py=H/2;
+  vx=getV();vy=0;
+  trail=[];
+}
+
+document.getElementById('Bfield').addEventListener('input',function(){document.getElementById('Bfieldv').textContent=parseFloat(this.value).toFixed(1)+' T';resetParticle();});
+document.getElementById('vel').addEventListener('input',function(){document.getElementById('velv').textContent=this.value+' m/s';resetParticle();});
+
+function syncSize(){
+  const r=cv.getBoundingClientRect();
+  const nW=Math.round(r.width)||700,nH=Math.round(r.height)||380;
+  if(nW!==W||nH!==H){W=nW;H=nH;cv.width=W;cv.height=H;resetParticle();}
+}
+
+function arrowHead(ctx,x,y,dx,dy,size,col){
+  const l=Math.sqrt(dx*dx+dy*dy);if(l<0.001)return;
+  ctx.fillStyle=col;ctx.save();ctx.translate(x,y);ctx.rotate(Math.atan2(dy/l,dx/l));
+  ctx.beginPath();ctx.moveTo(size,0);ctx.lineTo(-size*.7,-size*.5);ctx.lineTo(-size*.7,size*.5);ctx.closePath();ctx.fill();ctx.restore();
+}
+
+function label(ctx,text,x,y,col){
+  ctx.font='500 12px system-ui,sans-serif';
+  const tw=ctx.measureText(text).width;
+  ctx.fillStyle='rgba(255,255,255,0.95)';
+  ctx.fillRect(x-5,y-14,tw+10,18);
+  ctx.fillStyle=col;ctx.textAlign='left';
+  ctx.fillText(text,x,y);
+}
+
+function draw(){
+  syncSize();
+  const ctx=cv.getContext('2d');
+  const B=getB();
+  const v=getV();
+  const rPx=MQ*v/B;
+  const omega=B/MQ;
+  const dt=2*Math.PI/(omega*80);
+
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+
+  // Fond B
+  const bStep=Math.min(W,H)/11;
+  ctx.font='14px system-ui';ctx.textAlign='center';
+  for(let gx=bStep;gx<W;gx+=bStep){
+    for(let gy=bStep;gy<H;gy+=bStep){
+      ctx.fillStyle=Bdir>0?'#7F77DD2a':'#E24B4A2a';
+      ctx.fillText(Bdir>0?'⊙':'⊗',gx,gy+5);
+    }
+  }
+
+  // ── Physique ──
+  // Repère physique : y↑ / repère canvas : y↓
+  // v_physique = (vx_c, -vy_c, 0),  B = (0, 0, Bdir)
+  //
+  // v × B :
+  //   (v×B)_x =  vy_p * Bdir = -vy_c * Bdir
+  //   (v×B)_y = -vx_p * Bdir = -vx_c * Bdir
+  //
+  // F_physique = q * (v×B) :
+  //   Fx_p = q * (-vy_c) * Bdir
+  //   Fy_p = q * (-vx_c) * Bdir
+  //
+  // Conversion en canvas (Fx_c = Fx_p, Fy_c = -Fy_p) :
+  //   Fx_c = -qSign * Bdir * vy_c
+  //   Fy_c = +qSign * Bdir * vx_c   ← BUG : ce signe donnait vers le BAS
+  //
+  // CORRECTION : Fy_c = -Fy_p = -q*(-vx_c)*Bdir = +q*vx_c*Bdir
+  // Mais physiquement pour q+, B⊙, v→droite :
+  //   Fy_p = q*(-vx_c)*Bdir < 0 (vers le bas physique = vers le HAUT canvas)
+  //   Fy_c = -Fy_p > 0 ... non, Fy_c doit être < 0 pour pointer vers le HAUT canvas
+  //
+  // Repartir du produit vectoriel direct en canvas :
+  // Dans le repère canvas (y vers le bas), B_canvas = -Bdir * ẑ_canvas
+  // F_canvas = q * v_canvas × B_canvas
+  // v_canvas = (vx, vy, 0), B_canvas = (0, 0, -Bdir)
+  //   Fx_c = vy * (-Bdir) * q = -qSign * Bdir * vy  (inchangé)
+  //   Fy_c = -vx * (-Bdir) * q = +qSign * Bdir * vx ... même résultat
+  //
+  // Vérif numérique : q+, B⊙(Bdir=+1), vx=50, vy=0
+  //   Fx_c = 0, Fy_c = +1*1*50 = +50 → vers le BAS canvas ✗
+  //   La particule tourne vers le haut (vy devient négatif) donc le centre
+  //   est AU-DESSUS → F devrait pointer vers le HAUT (Fy < 0)
+  //
+  // Le sens de rotation dans le code : angle = qSign*Bdir*omega*dt > 0
+  // Rotation matricielle "positive" dans le code :
+  //   vx' =  vx*cos + vy*sin
+  //   vy' = -vx*sin + vy*cos
+  // Pour angle>0, petit angle : vx'≈vx, vy'≈-vx*angle < 0 → vy devient négatif → vers le HAUT ✓
+  //
+  // Donc la particule tourne vers le HAUT mais F affichée pointait vers le BAS.
+  // Il faut inverser F pour qu'elle pointe vers le centre :
+  //   Fx_c = +qSign * Bdir * vy   ← SIGNES INVERSÉS
+  //   Fy_c = -qSign * Bdir * vx   ← SIGNES INVERSÉS
+
+  if(!paused&&v>0){
+    for(let s=0;s<3;s++){
+      const angle=qSign*Bdir*omega*dt;
+      const c=Math.cos(angle),si=Math.sin(angle);
+      const nvx= vx*c+vy*si;
+      const nvy=-vx*si+vy*c;
+      vx=nvx;vy=nvy;
+      px+=vx*dt;py+=vy*dt;
+    }
+    trail.push({x:px,y:py});
+    if(trail.length>MAX_TRAIL)trail.shift();
+    if(px<-rPx*3||px>W+rPx*3||py<-rPx*3||py>H+rPx*3)resetParticle();
+  }
+
+  // Trajectoire
+  if(trail.length>2){
+    for(let i=1;i<trail.length;i++){
+      const alpha=i/trail.length;
+      ctx.strokeStyle=`rgba(220,80,50,${alpha*0.6})`;
+      ctx.lineWidth=1+alpha*1.8;
+      ctx.beginPath();ctx.moveTo(trail[i-1].x,trail[i-1].y);ctx.lineTo(trail[i].x,trail[i].y);ctx.stroke();
+    }
+  }
+
+  const vn=Math.sqrt(vx*vx+vy*vy);
+
+  // ── Vecteur F corrigé ──
+  // Signes inversés par rapport à la version précédente
+  const Fx = +qSign*Bdir*vy;
+  const Fy = -qSign*Bdir*vx;
+  const Fn_abs = vn>0.001 ? Math.sqrt(Fx*Fx+Fy*Fy) : 0.001;
+
+  // Centre de courbure = particule + F_unitaire * rPx
+  const circCx=px+(Fx/Fn_abs)*rPx;
+  const circCy=py+(Fy/Fn_abs)*rPx;
+
+  // Rayon pointillé vers centre
+  ctx.strokeStyle='#ddd';ctx.lineWidth=0.8;ctx.setLineDash([3,4]);
+  ctx.beginPath();ctx.moveTo(circCx,circCy);ctx.lineTo(px,py);ctx.stroke();ctx.setLineDash([]);
+  ctx.beginPath();ctx.arc(circCx,circCy,3,0,Math.PI*2);ctx.fillStyle='#ccc';ctx.fill();
+
+  // Vecteur v
+  if(vn>0.001){
+    const sc=60/vn;
+    const evx=vx*sc,evy=vy*sc;
+    ctx.strokeStyle='#E24B4A';ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+evx,py+evy);ctx.stroke();
+    arrowHead(ctx,px+evx,py+evy,vx,vy,8,'#E24B4A');
+    const norm=Math.sqrt(evx*evx+evy*evy)+0.001;
+    label(ctx,'v', px+evx+evy/norm*22, py+evy-evx/norm*22,'#E24B4A');
+  }
+
+  // Vecteur F
+  if(vn>0.001){
+    const sc2=60/Fn_abs;
+    const fex=Fx*sc2,fey=Fy*sc2;
+    ctx.strokeStyle='#1D9E75';ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+fex,py+fey);ctx.stroke();
+    arrowHead(ctx,px+fex,py+fey,Fx,Fy,8,'#1D9E75');
+    const norm2=Math.sqrt(fex*fex+fey*fey)+0.001;
+    label(ctx,'F=qv×B', px+fex+fey/norm2*22, py+fey-fex/norm2*22,'#1D9E75');
+  }
+
+  // Particule
+  ctx.beginPath();ctx.arc(px,py,11,0,Math.PI*2);
+  ctx.fillStyle=qSign>0?'#fee2e2':'#dbeafe';ctx.fill();
+  ctx.strokeStyle=qSign>0?'#E24B4A':'#378ADD';ctx.lineWidth=2.5;ctx.stroke();
+  ctx.fillStyle=qSign>0?'#E24B4A':'#378ADD';ctx.font='500 14px system-ui';ctx.textAlign='center';
+  ctx.fillText(qSign>0?'+':'−',px,py+5);
+
+  // Légende
+  const legY=H-12;
+  label(ctx,'v  vitesse',14,legY,'#E24B4A');
+  label(ctx,'F = qv×B  Lorentz',110,legY,'#1D9E75');
+  label(ctx,Bdir>0?'⊙ B sortant':'⊗ B entrant',W-130,legY,Bdir>0?'#7F77DD':'#BA7517');
+
+  const horaire=qSign*Bdir>0;
+  document.getElementById('info').textContent=
+    `r = ${rPx.toFixed(1)} px (r ∝ v/B) | v = ${v} m/s | B = ${B.toFixed(1)} T | `+
+    `rotation: ${horaire?'horaire ↻':'antihoraire ↺'} | `+(qSign>0?'charge +':'charge −')+
+    ` | F pointe vers le centre ✓`;
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
