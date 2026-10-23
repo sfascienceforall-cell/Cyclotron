@@ -68,13 +68,17 @@ a{color:inherit}
 @media (max-width:520px){.row,div:has(>input[type=range]){flex-wrap:wrap!important}
   .row>.pill:first-child,div:has(>input[type=range])>.pill:first-child{min-width:0!important;flex:1 1 100%}
   input[type=range]{min-width:0!important}.val{min-width:0!important}}
-.val{background:none!important;border:0!important;border-radius:0!important;padding:0!important;font:600 .9rem var(--f-num)!important;font-variant-numeric:tabular-nums;text-align:right;color:var(--ink)}
-.btn{background:var(--paper)!important;border:1px solid var(--line2)!important;border-radius:7px!important;color:var(--ink2)!important;
-  font:700 .82rem var(--f-ui)!important;padding:7px 13px!important;transition:background .15s,border-color .15s;cursor:pointer}
+.val{background:none!important;border:0!important;border-radius:0!important;padding:0!important;font:800 .92rem var(--f-ui)!important;font-variant-numeric:tabular-nums;text-align:right;color:var(--ink);white-space:nowrap}
+.btn{background:var(--paper)!important;border:1px solid var(--line2)!important;border-radius:8px!important;color:var(--ink)!important;
+  font:800 .82rem var(--f-ui)!important;letter-spacing:.005em;padding:8px 14px!important;transition:background .15s,border-color .15s;cursor:pointer}
+.btn:active{transform:translateY(1px)}
 .btn:hover{background:var(--press)!important;border-color:var(--faint)!important}
 .btn.on{background:var(--navy)!important;border-color:var(--navy)!important;color:#fff!important;box-shadow:none}
-.fml{background:var(--sel)!important;border:0!important;border-radius:10px!important;font:400 1.06rem/1.7 var(--f-math)!important;color:var(--ink);padding:10px 14px!important;margin:12px 0!important}
-.info{background:var(--bg)!important;border:1px solid var(--line)!important;border-radius:10px!important;font:500 .84rem/1.8 var(--f-num)!important;color:var(--muted)!important;padding:9px 14px!important}
+.fml{background:var(--sel)!important;border:0!important;border-left:4px solid var(--navy)!important;border-radius:10px!important;font:600 1rem/1.75 var(--f-ui)!important;color:var(--ink);padding:12px 16px!important;margin:12px 0!important}
+.fml b,.fml strong{font-weight:800}
+.fml sub,.fml sup,.info sub,.info sup{font-size:.72em}
+.info{background:var(--bg)!important;border:1px solid var(--line)!important;border-radius:10px!important;font:600 .86rem/1.8 var(--f-ui)!important;font-variant-numeric:tabular-nums;color:var(--muted)!important;padding:10px 14px!important}
+.info b,.info strong{font-weight:800}
 select{font:600 .86rem var(--f-ui)!important;border:1px solid var(--line2)!important;border-radius:7px!important;background:var(--paper)!important;color:var(--ink)!important;padding:6px 8px!important}
 input[type=range]{-webkit-appearance:none;appearance:none;height:24px;background:linear-gradient(var(--line),var(--line)) center/100% 4px no-repeat;cursor:pointer;--pc:var(--blue)}
 input[type=range]::-webkit-slider-runnable-track{height:4px;background:transparent;border-radius:2px}
@@ -92,7 +96,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 .sfa-list a{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:baseline;padding:7px 8px;border-radius:8px;text-decoration:none;font:600 13px/1.35 var(--f-ui);color:var(--ink2)}
 .sfa-list a:hover{background:var(--press)}
 .sfa-list a.on{background:var(--sel);color:var(--chip-ink)}
-.sfa-list a i{font:600 11px var(--f-num);font-style:normal;color:var(--faint)}
+.sfa-list a i{font:800 11px var(--f-ui);font-style:normal;color:var(--faint)}
 .sfa-promo{background:var(--navy);color:#fff;border-radius:12px;padding:16px}
 .sfa-promo small{display:block;font:800 10px var(--f-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--yellow);margin-bottom:6px}
 .sfa-promo b{display:block;font:800 16px/1.3 var(--f-ui);margin-bottom:12px}
@@ -132,8 +136,8 @@ new MutationObserver(ms=>ms.forEach(m=>{if(m.target.classList&&m.target.classLis
 </script>
 <header class="sfa-top"><div class="in">
   <a class="sfa-logo" href="https://sfascienceforall-cell.github.io/simulations/"><i>SFA</i>Science For All</a>
-  <nav class="sfa-nav"><a class="on" href="https://sfascienceforall-cell.github.io/simulations/">Simulations</a><a href="#">Prépa médecine</a></nav>
-  <a class="sfa-cta" href="#">Découvrir la prépa</a></div></header>
+  <nav class="sfa-nav"><a class="on" href="https://sfascienceforall-cell.github.io/simulations/">Simulations</a><a href="https://sfascienceforall-cell.github.io/simulations/#EX">Exercices</a><a href="https://sfascienceforall-cell.github.io/simulations/prepa/">Prépa médecine</a></nav>
+  <a class="sfa-cta" href="https://sfascienceforall-cell.github.io/simulations/prepa/">Découvrir la prépa</a></div></header>
 <div class="sfa-page">
 <nav class="sfa-crumbs" aria-label="Fil d'Ariane"><a href="https://sfascienceforall-cell.github.io/simulations/">Simulations</a>›<a href="https://sfascienceforall-cell.github.io/simulations/#PH11">PH11 · Magnétisme</a>›<b>Cyclotron</b></nav>
 <div class="sfa-grid"><main style="min-width:0">
@@ -173,7 +177,8 @@ new MutationObserver(ms=>ms.forEach(m=>{if(m.target.classList&&m.target.classLis
  
 <script>
 const cv=document.getElementById('cv');
-let W=0,H=0,paused=false,qSign=1,Bdir=1;
+let W=0,H=0,paused=false,qSign=1,Bdir=1,S=1,DPR=1,LEGTOP=0;
+const FONT=(w,sz)=>w+' '+sz+'px Mulish,system-ui,sans-serif';
 let px,py,vx,vy,trail=[];
 const MAX_TRAIL=600;
 const MQ=0.8;
@@ -188,6 +193,8 @@ function resetParticle(){
   if(!W)return;
   px=W/2;py=H/2;
   vx=getV();vy=0;
+  /* cercle centré dans la zone (la particule démarre en bas ou en haut du cercle) */
+  const r0=MQ*vx/getB()*S;if(r0<H/2-50)py=H/2-20+qSign*Bdir*r0;
   trail=[];
 }
  
@@ -197,7 +204,10 @@ document.getElementById('vel').addEventListener('input',function(){document.getE
 function syncSize(){
   const r=cv.getBoundingClientRect();
   const nW=Math.round(r.width)||700,nH=Math.round(r.height)||380;
-  if(nW!==W||nH!==H){W=nW;H=nH;cv.width=W;cv.height=H;resetParticle();}
+  DPR=window.devicePixelRatio||1;
+  if(nW!==W||nH!==H){W=nW;H=nH;cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+    S=Math.max(1.2,Math.min(4,Math.min(W,H)/140)); /* échelle d'affichage : le cercle occupe bien la zone */
+    resetParticle();}
 }
  
 function arrowHead(ctx,x,y,dx,dy,size,col){
@@ -206,44 +216,53 @@ function arrowHead(ctx,x,y,dx,dy,size,col){
   ctx.beginPath();ctx.moveTo(size,0);ctx.lineTo(-size*.7,-size*.5);ctx.lineTo(-size*.7,size*.5);ctx.closePath();ctx.fill();ctx.restore();
 }
  
-function label(ctx,text,x,y,col){
-  ctx.font='500 12px Mulish,system-ui,sans-serif';
-  const tw=ctx.measureText(text).width;
-  ctx.fillStyle='rgba(255,255,255,0.95)';
-  ctx.fillRect(x-5,y-14,tw+10,18);
-  ctx.fillStyle=col;ctx.textAlign='left';
-  ctx.fillText(text,x,y);
+// légende : panneau blanc arrondi, éléments renvoyés à la ligne si besoin
+function legend(ctx,items){
+  ctx.font=FONT(700,12);const pad=10,gap=16,rowH=20,maxW=W-24;
+  const ws=items.map(it=>ctx.measureText(it[1]).width+22);
+  const rows=[[]];let cw=0;
+  ws.forEach((w,i)=>{if(cw>0&&cw+gap+w>maxW-2*pad){rows.push([]);cw=0;}rows[rows.length-1].push(i);cw+=(cw?gap:0)+w;});
+  const pw=Math.max(...rows.map(r=>r.reduce((a,i,k)=>a+ws[i]+(k?gap:0),0)))+2*pad,ph=rows.length*rowH+12;
+  const x0=12,y0=H-12-ph;LEGTOP=y0;
+  ctx.fillStyle='rgba(255,255,255,.96)';ctx.strokeStyle='#e3e7ed';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(x0,y0,pw,ph,8);ctx.fill();ctx.stroke();
+  rows.forEach((r,ri)=>{let x=x0+pad;const y=y0+6+ri*rowH+rowH/2;r.forEach(i=>{const [col,txt,kind]=items[i];
+    if(kind==='B'){ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x+6,y,6,0,7);ctx.stroke();
+      if(Bdir>0){ctx.fillStyle=col;ctx.beginPath();ctx.arc(x+6,y,1.8,0,7);ctx.fill();}else{ctx.beginPath();ctx.moveTo(x+2.5,y-3.5);ctx.lineTo(x+9.5,y+3.5);ctx.moveTo(x+9.5,y-3.5);ctx.lineTo(x+2.5,y+3.5);ctx.stroke();}}
+    else{ctx.strokeStyle=col;ctx.lineWidth=3;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+12,y);ctx.stroke();}
+    ctx.fillStyle='#13233a';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(txt,x+20,y+1);ctx.textBaseline='alphabetic';x+=ws[i]+gap;});});
 }
  
 // Étiquette de vecteur : centrée au-delà de la pointe (dans l'axe), sans masquer la flèche, gardée dans le canvas
 function tipLabel(ctx,text,tx,ty,ux,uy,col){
-  ctx.font='500 12px Mulish,system-ui,sans-serif';
+  ctx.font=FONT(800,13);
   const hw=ctx.measureText(text).width/2+4,hh=9,d=hw*Math.abs(ux)+hh*Math.abs(uy)+6;
   const x0=tx+ux*d,y0=ty+uy*d;
-  const x=Math.max(hw+2,Math.min(W-hw-2,x0)),y=Math.max(hh+2,Math.min(H-28-hh,y0)); // au-dessus de la légende
+  const x=Math.max(hw+2,Math.min(W-hw-2,x0)),y=Math.max(hh+2,Math.min((LEGTOP||H-40)-4-hh,y0)); // au-dessus de la légende
   if(Math.hypot(x-x0,y-y0)>30) return; // vecteur hors du canvas : pas d'étiquette orpheline
-  ctx.fillStyle='rgba(255,255,255,0.85)';ctx.fillRect(x-hw,y-hh,2*hw,2*hh);
-  ctx.fillStyle=col;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,x,y);ctx.textBaseline='alphabetic';
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';ctx.strokeStyle='rgba(255,255,255,.95)';ctx.lineWidth=4;ctx.strokeText(text,x,y);
+  ctx.fillStyle=col;ctx.fillText(text,x,y);ctx.textBaseline='alphabetic';
 }
 
 function draw(){
   syncSize();
-  const ctx=cv.getContext('2d');
+  const ctx=cv.getContext('2d');ctx.setTransform(DPR,0,0,DPR,0,0);
   const B=getB();
   const v=getV();
-  const rPx=MQ*v/B;
+  const rPx=MQ*v/B*S;
   const omega=B/MQ;
   const dt=2*Math.PI/(omega*80);
  
   ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
  
   // Fond B
-  const bStep=Math.min(W,H)/11;
-  ctx.font='14px Mulish,system-ui,sans-serif';ctx.textAlign='center';
-  for(let gx=bStep;gx<W;gx+=bStep){
-    for(let gy=bStep;gy<H;gy+=bStep){
-      ctx.fillStyle=Bdir>0?'#7F77DD2a':'#E24B4A2a';
-      ctx.fillText(Bdir>0?'⊙':'⊗',gx,gy+5);
+  const bStep=Math.max(34,Math.min(W,H)/10);
+  const bc=Bdir>0?'rgba(127,119,221,.24)':'rgba(186,117,23,.26)';
+  ctx.strokeStyle=bc;ctx.fillStyle=bc;ctx.lineWidth=1.2;ctx.lineCap='round';
+  for(let gx=bStep/2;gx<W;gx+=bStep){
+    for(let gy=bStep/2;gy<H;gy+=bStep){
+      ctx.beginPath();ctx.arc(gx,gy,5.5,0,7);ctx.stroke();
+      if(Bdir>0){ctx.beginPath();ctx.arc(gx,gy,1.6,0,7);ctx.fill();}
+      else{ctx.beginPath();ctx.moveTo(gx-3.2,gy-3.2);ctx.lineTo(gx+3.2,gy+3.2);ctx.moveTo(gx+3.2,gy-3.2);ctx.lineTo(gx-3.2,gy+3.2);ctx.stroke();}
     }
   }
  
@@ -292,25 +311,28 @@ function draw(){
   //   Fy_c = -qSign * Bdir * vx   ← SIGNES INVERSÉS
  
   if(!paused&&v>0){
-    for(let s=0;s<3;s++){
-      const angle=qSign*Bdir*omega*dt;
+    const nSub=Math.ceil(S)*2,dts=dt/nSub*3; /* sous-pas plus fins : même mouvement, tracé lisse */
+    for(let s=0;s<nSub;s++){
+      const angle=qSign*Bdir*omega*dts;
       const c=Math.cos(angle),si=Math.sin(angle);
       const nvx= vx*c+vy*si;
       const nvy=-vx*si+vy*c;
       vx=nvx;vy=nvy;
-      px+=vx*dt;py+=vy*dt;
+      px+=vx*dts*S;py+=vy*dts*S;
+      if(s%2===1){trail.push({x:px,y:py});}
     }
-    trail.push({x:px,y:py});
-    if(trail.length>MAX_TRAIL)trail.shift();
+    while(trail.length>MAX_TRAIL*nSub/2)trail.shift();
     if(px<-rPx*3||px>W+rPx*3||py<-rPx*3||py>H+rPx*3)resetParticle();
   }
  
   // Trajectoire
+  const PC=qSign>0?'226,75,74':'55,138,221';
   if(trail.length>2){
+    ctx.lineCap='round';
     for(let i=1;i<trail.length;i++){
       const alpha=i/trail.length;
-      ctx.strokeStyle=`rgba(220,80,50,${alpha*0.6})`;
-      ctx.lineWidth=1+alpha*1.8;
+      ctx.strokeStyle=`rgba(${PC},${0.12+alpha*0.6})`;
+      ctx.lineWidth=1.5+alpha*1.5;
       ctx.beginPath();ctx.moveTo(trail[i-1].x,trail[i-1].y);ctx.lineTo(trail[i].x,trail[i].y);ctx.stroke();
     }
   }
@@ -328,42 +350,47 @@ function draw(){
   const circCy=py+(Fy/Fn_abs)*rPx;
  
   // Rayon pointillé vers centre
-  ctx.strokeStyle='#ddd';ctx.lineWidth=0.8;ctx.setLineDash([3,4]);
-  ctx.beginPath();ctx.moveTo(circCx,circCy);ctx.lineTo(px,py);ctx.stroke();ctx.setLineDash([]);
-  ctx.beginPath();ctx.arc(circCx,circCy,3,0,Math.PI*2);ctx.fillStyle='#ccc';ctx.fill();
+  ctx.strokeStyle='#d3d9e2';ctx.lineWidth=1.2;ctx.setLineDash([4,5]);
+  ctx.beginPath();ctx.arc(circCx,circCy,rPx,0,Math.PI*2);ctx.stroke();
+  ctx.strokeStyle='#8a95a3';ctx.beginPath();ctx.moveTo(circCx,circCy);ctx.lineTo(px,py);ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle='#13233a';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(circCx-4,circCy);ctx.lineTo(circCx+4,circCy);ctx.moveTo(circCx,circCy-4);ctx.lineTo(circCx,circCy+4);ctx.stroke();
+  if(rPx>34){const mx=(circCx+px)/2,my=(circCy+py)/2;ctx.font=FONT(800,13);ctx.textAlign='center';ctx.lineJoin='round';ctx.strokeStyle='rgba(255,255,255,.95)';ctx.lineWidth=4;
+    const vnn=Math.hypot(vx,vy)||1,ox=vx/vnn*12,oy=vy/vnn*12;ctx.strokeText('r',mx+ox,my+oy+4);ctx.fillStyle='#5f6b7a';ctx.fillText('r',mx+ox,my+oy+4);}
  
   // Vecteur v
   if(vn>0.001){
-    const sc=60/vn;
+    const L=Math.max(56,Math.min(80,Math.min(W,H)*0.13)),sc=L/vn;
     const evx=vx*sc,evy=vy*sc;
-    ctx.strokeStyle='#E24B4A';ctx.lineWidth=2.5;
-    ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+evx,py+evy);ctx.stroke();
-    arrowHead(ctx,px+evx,py+evy,vx,vy,8,'#E24B4A');
+    ctx.strokeStyle='#E24B4A';ctx.lineWidth=3;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+evx*(1-5/L),py+evy*(1-5/L));ctx.stroke();
+    arrowHead(ctx,px+evx,py+evy,vx,vy,11,'#E24B4A');
     tipLabel(ctx,'v',px+evx,py+evy,vx/vn,vy/vn,'#E24B4A');
   }
  
   // Vecteur F
   if(vn>0.001){
-    const sc2=60/Fn_abs;
+    const L=Math.max(30,Math.min(80,Math.min(W,H)*0.13,rPx*0.72)),sc2=L/Fn_abs;
     const fex=Fx*sc2,fey=Fy*sc2;
-    ctx.strokeStyle='#1D9E75';ctx.lineWidth=2.5;
-    ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+fex,py+fey);ctx.stroke();
-    arrowHead(ctx,px+fex,py+fey,Fx,Fy,8,'#1D9E75');
-    tipLabel(ctx,'F=qv×B',px+fex,py+fey,Fx/Fn_abs,Fy/Fn_abs,'#1D9E75');
+    ctx.strokeStyle='#1D9E75';ctx.lineWidth=3;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+fex*(1-5/L),py+fey*(1-5/L));ctx.stroke();
+    arrowHead(ctx,px+fex,py+fey,Fx,Fy,11,'#1D9E75');
+    if(rPx>40){ // étiquette à côté de la flèche (côté opposé à v), pour ne pas masquer le centre
+      ctx.font=FONT(800,13);const tw=ctx.measureText('F = qv×B').width;const ux=-vx/vn,uy=-vy/vn;
+      let lx=px+fex*0.5+ux*(tw/2+8),ly=py+fey*0.5+uy*14+4;lx=Math.max(tw/2+4,Math.min(W-tw/2-4,lx));
+      ctx.textAlign='center';ctx.lineJoin='round';ctx.strokeStyle='rgba(255,255,255,.95)';ctx.lineWidth=4;ctx.strokeText('F = qv×B',lx,ly);ctx.fillStyle='#1D9E75';ctx.fillText('F = qv×B',lx,ly);
+    }else tipLabel(ctx,'F = qv×B',px+fex,py+fey,Fx/Fn_abs,Fy/Fn_abs,'#1D9E75');
   }
  
   // Particule
-  ctx.beginPath();ctx.arc(px,py,11,0,Math.PI*2);
-  ctx.fillStyle=qSign>0?'#fee2e2':'#dbeafe';ctx.fill();
-  ctx.strokeStyle=qSign>0?'#E24B4A':'#378ADD';ctx.lineWidth=2.5;ctx.stroke();
-  ctx.fillStyle=qSign>0?'#E24B4A':'#378ADD';ctx.font='500 14px Mulish,system-ui,sans-serif';ctx.textAlign='center';
-  ctx.fillText(qSign>0?'+':'−',px,py+5);
+  {const col=qSign>0?'#E24B4A':'#378ADD',R0=12;
+  ctx.save();ctx.shadowColor='rgba(19,35,58,.25)';ctx.shadowBlur=8;ctx.shadowOffsetY=2;
+  const g=ctx.createRadialGradient(px-4,py-5,1,px,py,R0);g.addColorStop(0,'#fff');g.addColorStop(1,qSign>0?'#f6b3b2':'#b5d4f4');
+  ctx.beginPath();ctx.arc(px,py,R0,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.restore();
+  ctx.beginPath();ctx.arc(px,py,R0,0,Math.PI*2);ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.stroke();
+  ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(px-5,py);ctx.lineTo(px+5,py);if(qSign>0){ctx.moveTo(px,py-5);ctx.lineTo(px,py+5);}ctx.stroke();}
  
   // Légende
-  const legY=H-12;
-  label(ctx,'v  vitesse',14,legY,'#E24B4A');
-  label(ctx,'F = qv×B  Lorentz',110,legY,'#1D9E75');
-  label(ctx,Bdir>0?'⊙ B sortant':'⊗ B entrant',W-130,legY,Bdir>0?'#7F77DD':'#BA7517');
+  legend(ctx,[['#E24B4A','v  vitesse'],['#1D9E75','F = qv×B  (Lorentz)'],[Bdir>0?'#7F77DD':'#BA7517',Bdir>0?'B sortant':'B entrant','B']]);
  
   const horaire=qSign*Bdir>0;
   document.getElementById('info').textContent=
@@ -379,7 +406,7 @@ draw();
 </section></main>
 <aside class="sfa-side">
   <div class="sfa-list"><h2>PH11 · Magnétisme et forces électromagnétiques<span>4 simulations</span></h2><ol><li><a href="https://sfascienceforall-cell.github.io/regle-main-droite/"><i>01</i>Règle de la main droite</a></li><li><a href="https://sfascienceforall-cell.github.io/simulations/aimants-laplace/"><i>02</i>Aimants, courants et force de Laplace</a></li><li><a href="https://sfascienceforall-cell.github.io/forces-magn-tique-sur-fils-/"><i>03</i>Forces entre fils parallèles</a></li><li><a class="on" aria-current="page" href="https://sfascienceforall-cell.github.io/Cyclotron/"><i>04</i>Cyclotron</a></li></ol></div>
-  <div class="sfa-promo"><small>Envie d'aller plus loin ?</small><b>La prépa SFA : le cours complet, les exercices type examen corrigés et le suivi.</b><a href="#">Voir la prépa</a></div>
+  <div class="sfa-promo"><small>Envie d'aller plus loin ?</small><b>La prépa SFA : le cours complet, les exercices type examen corrigés et le suivi.</b><a href="https://sfascienceforall-cell.github.io/simulations/prepa/">Voir la prépa</a></div>
 </aside></div></div>
 <footer class="sfa-foot">Science For All · simulations interactives de physique</footer>
 </body>
